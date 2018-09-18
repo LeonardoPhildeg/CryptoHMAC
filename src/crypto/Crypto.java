@@ -2,6 +2,7 @@ package crypto;
 
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -13,7 +14,6 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import java.security.Key;
 import org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider;
 import org.bouncycastle.util.encoders.Hex;
 
@@ -57,10 +57,12 @@ public class Crypto {
     }
     
     public String hMAC(String text, String sal) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException {
+    	//DERIVA UMA CHAVE A PARTIR DO SENHA E O SAL
     	String key = generateDerivedKey(text,sal);
     	Mac hmac = Mac.getInstance("HMacSHA256", "BCFIPS");
     	Key signingKey = new SecretKeySpec(key.getBytes(), "HMacSHA256");
     	
+    	//REALIZA O HMAC
     	hmac.init(signingKey);
     	hmac.update(text.getBytes());
     	byte[] hmacText = hmac.doFinal();

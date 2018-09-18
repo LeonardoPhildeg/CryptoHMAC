@@ -87,6 +87,48 @@ public class UsuarioDAO {
         return false;
             
 	}
+
+
+	public boolean updateUsuario(String login, String novoLogin, String novaSenha, String novoSal) {
+        Connection con = ConnectionFactory.getConnection();
+        
+        PreparedStatement stmt = null;
+        
+        try {
+            stmt = con.prepareStatement("UPDATE Usuario SET login = ?, senha = ?, sal = ? WHERE login = ?");
+            stmt.setString(1, novoLogin);
+            stmt.setString(2, novaSenha);
+            stmt.setString(3, novoSal);
+            stmt.setString(4, login);
+            stmt.executeUpdate();
+            return true;
+            
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+		return false;
+	}
+	
+	public boolean deleteUsuario(String login) {
+        Connection con = ConnectionFactory.getConnection();
+        
+        PreparedStatement stmt = null;
+        
+        try {
+            stmt = con.prepareStatement("DELETE FROM Usuario WHERE login = ?");
+            stmt.setString(1, login);
+            stmt.executeUpdate();
+            return true;
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+        return false;
+	}
 	
 	
 }	
